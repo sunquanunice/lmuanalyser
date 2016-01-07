@@ -37,6 +37,12 @@
                            <adapt
                                  type="org.eclipse.jdt.internal.core.PackageFragment">
                            </adapt>
+                           <adapt
+                                 type="org.eclipse.core.resources.IProject">
+                           </adapt>
+                           <adapt
+                                 type="org.eclipse.core.resources.IFolder">
+                           </adapt>
                         </or>
                      </iterate>
                   </with>

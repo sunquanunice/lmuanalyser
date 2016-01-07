@@ -66,7 +66,9 @@ public class LMUGui extends JFrame
 {
     public static void main(String[] args)
     {
-	new LMUGui("load /Users/lhogie/lib/java/commons-logging-api.jar");
+	//new LMUGui("load /Users/lhogie/lib/java/commons-logging-api.jar");
+    	//new LMUGui(null);
+	new LMUGui("load resource/deploy.jar");
     }
 
     JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
@@ -652,6 +654,9 @@ public class LMUGui extends JFrame
 	try
 	{
 	    JavaResource resource = new JavaResource(getClass(), "car.lmu");
+	    System.out.println("*******************************");
+	    System.out.println(new String(resource.getByteArray()));
+	    System.out.println("**********************************");
 	    load(new String(resource.getByteArray()));
 	}
 	catch (Exception ex)
