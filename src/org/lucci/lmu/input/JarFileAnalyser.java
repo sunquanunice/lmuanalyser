@@ -94,6 +94,7 @@ public class JarFileAnalyser extends ModelFactory
 			// Entities
 			for (Class<?> thisClass : classContainers.listAllClasses())
 			{
+				System.err.println("java file in jars : " + thisClass.getSimpleName());
 				// if this is not an anonymous inner class (a.b$1)
 				// we take it into account
 				if (!thisClass.getName().matches(".+\\$[0-9]+"))

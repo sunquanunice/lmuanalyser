@@ -57,6 +57,7 @@ public class ImageRenderer extends ClassDiagramViewer
 			{
 				try
 				{
+					System.err.println("show images here?");
 					setModel(model);
 					redraw();
 				}

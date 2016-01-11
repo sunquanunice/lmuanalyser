@@ -66,9 +66,10 @@ public class LMUGui extends JFrame
 {
     public static void main(String[] args)
     {
+    	new LMUGui("load resource/jsoup-1.8.3.jar");
 	//new LMUGui("load /Users/lhogie/lib/java/commons-logging-api.jar");
     	//new LMUGui(null);
-	new LMUGui("load resource/deploy.jar");
+	
     }
 
     JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
@@ -107,7 +108,6 @@ public class LMUGui extends JFrame
     public LMUGui(String lmu)
     {
 	super();
-
 	renderers.add(new PDFRenderer());
 	renderers.add(new DotRenderer());
 	// renderers.add(new LMURenderer());
@@ -336,7 +336,6 @@ public class LMUGui extends JFrame
 	else
 	{
 	    s += " - " + file.getAbsolutePath();
-
 	    if (modificationCount > 0)
 	    {
 		s += " (modified)";
@@ -352,6 +351,8 @@ public class LMUGui extends JFrame
 	{
 	    LmuParser parser = LmuParser.getParser();
 	    this.model = parser.createModel(editor.getText());
+	    System.err.println(editor.getText());
+	    //this.model = parser.createModel(editor.getText());
 	    assistantLabel.setIcon(new ImageIcon(getClass().getResource("smileys/smiley.gif")));
 	    assistantLabel.setText("Good job!");
 	    return true;
@@ -360,6 +361,7 @@ public class LMUGui extends JFrame
 	{
 	    assistantLabel.setIcon(new ImageIcon(getClass().getResource("smileys/angry.gif")));
 	    assistantLabel.setText(ex.getMessage());
+	    System.err.println("Go to here");
 	    return false;
 	}
     }

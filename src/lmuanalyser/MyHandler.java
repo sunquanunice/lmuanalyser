@@ -1,5 +1,9 @@
 package lmuanalyser;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 import javax.swing.JOptionPane;
 
 import org.eclipse.core.commands.AbstractHandler;
@@ -20,20 +24,37 @@ public class MyHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		ISelection selection  = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getSelection();
-		if(!(selection instanceof StructuredSelection)) return null;
+		ISelection selection = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getSelection();
+		if (!(selection instanceof StructuredSelection))
+			return null;
 		Object selected = ((StructuredSelection) selection).getFirstElement();
-//		assert(selected instanceof IFile);
-		//new MyLMUFrameView(selected);
-		if (selected instanceof IProject || selected instanceof IFile || selected instanceof IFolder ||
-				selected instanceof PlatformObject	) {
-			IResource resource = (IResource)Platform.getAdapterManager().getAdapter(selected, IResource.class);
-        	IPath path = resource.getLocation();
-        	JOptionPane.showMessageDialog(null, path + "\n" + selected.getClass());
-        } 
-		
+		// assert(selected instanceof IFile);
+		// new MyLMUFrameView(selected);
+
+		if (selected instanceof IFile) {
+			IResource resource = (IResource) Platform.getAdapterManager().getAdapter(selected, IResource.class);
+			String path = resource.getLocation().toString();
+			MyFrame myFrame = new MyFrame(path);
+		}
+
+		if (selected instanceof IProject /* || selected instanceof IFile */ || selected instanceof IFolder
+				|| selected instanceof PlatformObject) {
+			IResource resource = (IResource) Platform.getAdapterManager().getAdapter(selected, IResource.class);
+			IPath path = resource.getLocation();
+
+			/*
+			 * //Get the classes names in the folder String spath =
+			 * path.toString(); try {
+			 * Files.walk(Paths.get(spath)).forEach(filePath -> { if
+			 * (Files.isRegularFile(filePath)) { System.err.println(filePath); }
+			 * }); } catch (IOException e) { // TODO Auto-generated catch block
+			 * e.printStackTrace(); }
+			 */
+			if (!(selected instanceof IFile)) {
+				JOptionPane.showMessageDialog(null, path + "\n" + selected.getClass());
+			}
+		}
 		return null;
 	}
 
-	
 }

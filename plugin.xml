@@ -20,10 +20,16 @@
                         <or>
                            <adapt
                                  type="org.eclipse.core.resources.IFile">
-                              <test
-                                    property="org.eclipse.core.resources.extension"
-                                    value="java">
-                              </test>
+                              <or>
+                                 <test
+                                       property="org.eclipse.core.resources.extension"
+                                       value="java">
+                                 </test>
+                                 <test
+                                       property="org.eclipse.core.resources.extension"
+                                       value="jar">
+                                 </test>
+                              </or>
                            </adapt>
                            <adapt
                                  type="org.eclipse.jdt.internal.core.JarPackageFragmentRoot">
