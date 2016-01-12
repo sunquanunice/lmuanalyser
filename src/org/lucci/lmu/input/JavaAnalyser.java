@@ -17,6 +17,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import org.lucci.lmu.AssociationRelation;
 import org.lucci.lmu.Attribute;
@@ -26,36 +27,17 @@ import org.lucci.lmu.InheritanceRelation;
 import org.lucci.lmu.Model;
 import org.lucci.lmu.Operation;
 import org.lucci.lmu.Visibility;
-import org.lucci.lmu.test.DynamicCompiler;
 
 import toools.ClassContainer;
-import toools.ClassName;
-import toools.ClassPath;
-import toools.Clazz;
-import toools.io.FileUtilities;
 import toools.io.file.RegularFile;
 
-/*
- * Created on Oct 11, 2004
- */
-
-/**
- * @author luc.hogie
- */
-public class JarFileAnalyser extends ModelFactory
-{
-	private Collection<RegularFile> knownJarFiles = new HashSet<RegularFile>();
+public class JavaAnalyser extends ModelFactory{
+	
 	private Map<Class<?>, Entity> primitiveMap = new HashMap<Class<?>, Entity>();
 	private Map<Entity, Class<?>> entity_class = new HashMap<Entity, Class<?>>();
-
-	public Collection<RegularFile> getJarFiles()
-	{
-		return this.knownJarFiles;
-	}
-
+	private JarFileAnalyser modelAssistant = new JarFileAnalyser();
 	@Override
-	public Model createModel(byte[] data) throws ParseError
-	{
+	public Model createModel(byte[] data) throws ParseError, ModelException {
 		Model model = new Model();
 		primitiveMap.put(void.class, Entities.findEntityByName(model, "void"));
 		primitiveMap.put(int.class, Entities.findEntityByName(model, "int"));
@@ -72,86 +54,31 @@ public class JarFileAnalyser extends ModelFactory
 		primitiveMap.put(Object.class, Entities.findEntityByName(model, "object"));
 		primitiveMap.put(java.util.Date.class, Entities.findEntityByName(model, "date"));
 		primitiveMap.put(java.sql.Date.class, Entities.findEntityByName(model, "date"));
-
-		try
-		{
-
-			// create a jar file on the disk from the binary data
-			RegularFile jarFile = RegularFile.createTempFile("lmu-", ".jar");
-			jarFile.setContent(data);
-			
-			ClassLoader classLoader = new URLClassLoader(new URL[] { jarFile.toURL() });
-
-			ClassPath classContainers = new ClassPath();
-			
-			classContainers.add(new ClassContainer(jarFile, classLoader));
-
-			for (RegularFile thisJarFile : this.knownJarFiles)
+		//Convert byte[] to String
+		String path = new String(data);
+		try {
+			int index = path.indexOf(File.separator + "src" + File.separator);
+			RegularFile javaBin = new RegularFile(path.substring(0, index)+ File.separator + "bin" + File.separator);
+			ClassLoader classLoader = new URLClassLoader(new URL[] { javaBin.toURL() });
+			String pattern = Pattern.quote(System.getProperty("file.separator"));
+			String packClass = path.substring(index+5, path.length()-5).replaceAll(pattern, ".");
+			Class<?> thisClass = classLoader.loadClass(packClass);
+			if (!thisClass.getName().matches(".+\\$[0-9]+"))
 			{
-				classContainers.add(new ClassContainer(thisJarFile, classLoader));
+				Entity entity = new Entity();
+				entity.setName(modelAssistant.computeEntityName(thisClass));
+				entity.setNamespace(modelAssistant.computeEntityNamespace(thisClass));
+				entity_class.put(entity, thisClass);
+				model.addEntity(entity);
 			}
-
-			// take all the classes in the jar files and convert them to LMU
-			// Entities
-			for (Class<?> thisClass : classContainers.listAllClasses())
-			{
-				// if this is not an anonymous inner class (a.b$1)
-				// we take it into account
-				if (!thisClass.getName().matches(".+\\$[0-9]+"))
-				{
-					Entity entity = new Entity();
-					entity.setName(computeEntityName(thisClass));
-					entity.setNamespace(computeEntityNamespace(thisClass));
-					entity_class.put(entity, thisClass);
-					model.addEntity(entity);
-				}
-			}
-
-			// at this only the name of entities is known
-			// neither members nor relation are known
-			// let's find them
 			fillModel(model);
-			jarFile.delete();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		catch (IOException ex)
-		{
-			throw new IllegalStateException();
-		}
-
 		return model;
 	}
-
-	protected static Class<?> createClassNamed(String fullName)
-	{
-		ClassName cn = Clazz.getClassName(fullName);
-		String src = "";
-
-		if (cn.pkg != null)
-		{
-			src += "package " + cn.pkg + ";";
-		}
-
-		src += "public class " + cn.name + " {}";
-
-		// System.out.println(src);
-		return DynamicCompiler.compile(fullName, src);
-	}
-
-	/*
-	 * public static void main(String[] args) {
-	 * System.out.println(createClassNamed("lucci.Coucou"));
-	 * System.out.println(createClassNamed("Coucou")); }
-	 */
-
-	public String computeEntityName(Class<?> c)
-	{
-		return c.getName().substring(c.getName().lastIndexOf('.') + 1);
-	}
-
-	public String computeEntityNamespace(Class<?> c)
-	{
-		return c.getPackage() == null ? Entity.DEFAULT_NAMESPACE : c.getPackage().getName();
-	}
+	
 
 	private void fillModel(Model model)
 	{
@@ -197,8 +124,6 @@ public class JarFileAnalyser extends ModelFactory
 
 	private void initAttributes(Class<?> clazz, Entity entity, Model model)
 	{
-		System.out.println(clazz);
-		System.out.println(clazz.getClassLoader().getClass());
 
 		for (Field field : clazz.getDeclaredFields())
 		{
@@ -343,20 +268,19 @@ public class JarFileAnalyser extends ModelFactory
 
 		if (e == null)
 		{
-			e = Entities.findEntityByName(model, computeEntityName(c));
+			e = Entities.findEntityByName(model, modelAssistant.computeEntityName(c));
 
-			if (e == null && c != Object.class && Entities.isValidEntityName(computeEntityName(c)))
+			if (e == null && c != Object.class && Entities.isValidEntityName(modelAssistant.computeEntityName(c)))
 			{
 				e = new Entity();
 				e.setPrimitive(true);
-				e.setName(computeEntityName(c));
+				e.setName(modelAssistant.computeEntityName(c));
 				model.addEntity(e);
 			}
 		}
 
 		return e;
 	}
-
 	private Visibility getVisibility(Member m)
 	{
 		if ((m.getModifiers() & Modifier.PUBLIC) != 0)
@@ -375,11 +299,5 @@ public class JarFileAnalyser extends ModelFactory
 		{
 			return Visibility.PRIVATE;
 		}
-	}
-
-	public Model createModel(File file) throws ParseError, IOException
-	{
-		byte[] data = FileUtilities.getFileContent(file);
-		return createModel(data);
 	}
 }

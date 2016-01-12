@@ -66,6 +66,63 @@ public class MyFrame extends JFrame{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		} else if(src.endsWith(".java")) {
+			parser = LmuParser.getParser();
+			try {
+				model = parser.createModel("load " + src);
+				GraphVizBasedViewFactory imgFactory = new GraphVizBasedViewFactory("png");
+				byte[] bytes = imgFactory.writeModel(model);
+				this.image = new ImageIcon(bytes).getImage();
+				outputButton.setIcon(new ImageIcon(this.image));
+				outputButton.updateUI();
+			} catch (ParseError | ModelException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (WriterException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else if(src.startsWith("loadProject")) {
+			parser = LmuParser.getParser();
+			try {
+				model = parser.createModel(src);
+				GraphVizBasedViewFactory imgFactory = new GraphVizBasedViewFactory("png");
+				byte[] bytes = imgFactory.writeModel(model);
+				this.image = new ImageIcon(bytes).getImage();
+				outputButton.setIcon(new ImageIcon(this.image));
+				outputButton.updateUI();
+			} catch (ParseError e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ModelException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (WriterException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else if(src.startsWith("loadFolder")){
+			System.err.println("Load folder here here");
+			parser = LmuParser.getParser();
+			try {
+				model = parser.createModel(src);
+				GraphVizBasedViewFactory imgFactory = new GraphVizBasedViewFactory("png");
+				byte[] bytes = imgFactory.writeModel(model);
+				this.image = new ImageIcon(bytes).getImage();
+				outputButton.setIcon(new ImageIcon(this.image));
+				outputButton.updateUI();
+			} catch (ParseError e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ModelException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (WriterException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
+		
 	}
+	
 }

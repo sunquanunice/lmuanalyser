@@ -351,7 +351,6 @@ public class LMUGui extends JFrame
 	{
 	    LmuParser parser = LmuParser.getParser();
 	    this.model = parser.createModel(editor.getText());
-	    System.err.println(editor.getText());
 	    //this.model = parser.createModel(editor.getText());
 	    assistantLabel.setIcon(new ImageIcon(getClass().getResource("smileys/smiley.gif")));
 	    assistantLabel.setText("Good job!");

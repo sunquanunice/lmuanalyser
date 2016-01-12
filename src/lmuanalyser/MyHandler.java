@@ -35,10 +35,17 @@ public class MyHandler extends AbstractHandler {
 			IResource resource = (IResource) Platform.getAdapterManager().getAdapter(selected, IResource.class);
 			String path = resource.getLocation().toString();
 			MyFrame myFrame = new MyFrame(path);
+		} else if(selected instanceof IProject) {
+			IResource resource = (IResource) Platform.getAdapterManager().getAdapter(selected, IResource.class);
+			String path = resource.getLocation().toString();
+			MyFrame myFrame = new MyFrame("loadProject " + path);
+		} else if(selected instanceof IFolder) {
+			IResource resource = (IResource) Platform.getAdapterManager().getAdapter(selected, IResource.class);
+			String path = resource.getLocation().toString();
+			MyFrame myFrame = new MyFrame("loadFolder " + path);
 		}
 
-		if (selected instanceof IProject /* || selected instanceof IFile */ || selected instanceof IFolder
-				|| selected instanceof PlatformObject) {
+		if (selected instanceof IFolder || selected instanceof PlatformObject) {
 			IResource resource = (IResource) Platform.getAdapterManager().getAdapter(selected, IResource.class);
 			IPath path = resource.getLocation();
 
@@ -50,9 +57,7 @@ public class MyHandler extends AbstractHandler {
 			 * }); } catch (IOException e) { // TODO Auto-generated catch block
 			 * e.printStackTrace(); }
 			 */
-			if (!(selected instanceof IFile)) {
-				JOptionPane.showMessageDialog(null, path + "\n" + selected.getClass());
-			}
+			
 		}
 		return null;
 	}

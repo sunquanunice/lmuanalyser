@@ -1,7 +1,9 @@
 package org.lucci.lmu.input;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.file.FileSystem;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -206,7 +208,7 @@ public class LmuParser extends ModelFactory
 	for (lineNumber = 1; lineNumber <= tokens.size(); ++lineNumber)
 	{
 	    List<String> line = tokens.get(lineNumber - 1);
-
+	    
 	    if (line.size() == 0)
 	    {
 		// a blank line means that the current entity declaration ends
@@ -216,6 +218,7 @@ public class LmuParser extends ModelFactory
 	    else if (line.size() > 0)
 	    {
 		String statement = line.get(0);
+		
 
 		if (statement.startsWith("#"))
 		{
@@ -228,10 +231,11 @@ public class LmuParser extends ModelFactory
 		}
 		else
 		{
+			
 		    try
 		    {
 			getClass().getMethod('_' + statement, List.class).invoke(this, line);
-		    }
+			}
 		    catch (IllegalArgumentException e)
 		    {
 			e.printStackTrace();
@@ -726,6 +730,80 @@ public class LmuParser extends ModelFactory
 	    }
 	}
     }
+    public void _loadProject(List<String> line) throws ParseError, ModelException
+    {
+	if (line.size() >= 2) {
+	    for (int i = 1; i < line.size(); ++i)
+	    {
+		RegularFile file = new RegularFile(line.get(i));
+		if (file.exists())
+		{
+		    
+			ModelFactory modelFactory = ModelFactory.getModelFactory(line.get(0));
+
+			if (modelFactory == null)
+			{
+			    syntax(file.getPath() + ": dunno what to do with the java project! ");
+			}
+			else
+			{
+			    Model newModel = this.modelCache.get(file.getPath());
+
+			    if (newModel == null)
+			    {
+				newModel = modelFactory.createModel(file.getPath().getBytes());
+				model.merge(newModel);
+				modelCache.put(file, newModel);
+			    }
+			}
+		    }
+		
+		else
+		{
+		    syntax("File does not exist: " + file.getPath());
+		}
+	    }
+	}
+    } 
+
+    public void _loadFolder(List<String> line) throws ParseError, ModelException
+    {
+	if (line.size() >= 2) {
+	    for (int i = 1; i < line.size(); ++i)
+	    {
+		RegularFile file = new RegularFile(line.get(i));
+		System.err.println("Folder Folder");
+		if (file.exists())
+		{
+		    
+			ModelFactory modelFactory = ModelFactory.getModelFactory(line.get(0));
+
+			if (modelFactory == null)
+			{
+			    syntax(file.getPath() + ": dunno what to do with the java project! ");
+			}
+			else
+			{
+			    Model newModel = this.modelCache.get(file.getPath());
+
+			    if (newModel == null)
+			    {
+				newModel = modelFactory.createModel(file.getPath().getBytes());
+				model.merge(newModel);
+				modelCache.put(file, newModel);
+			    }
+			}
+		    }
+		
+		else
+		{
+		    syntax("File does not exist: " + file.getPath());
+		}
+	    }
+	}
+    } 
+
+
 
     public void _load(List<String> line) throws ParseError, ModelException
     {
@@ -742,7 +820,7 @@ public class LmuParser extends ModelFactory
 		if (file.exists())
 		{
 		    String fileExtension = file.getExtension();
-
+		    
 		    if (fileExtension == null)
 		    {
 			syntax("File name has not extension, which is required to guess its content type: "
@@ -764,7 +842,13 @@ public class LmuParser extends ModelFactory
 			    {
 				try
 				{
+				if(fileExtension.equals("java")) {
+					
+					newModel = modelFactory.createModel(file.getPath().getBytes());
+					
+				} else {
 				    newModel = modelFactory.createModel(file.getContent());
+				}
 				    model.merge(newModel);
 				    modelCache.put(file, newModel);
 				}
