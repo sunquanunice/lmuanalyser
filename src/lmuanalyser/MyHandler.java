@@ -43,20 +43,25 @@ public class MyHandler extends AbstractHandler {
 			IResource resource = (IResource) Platform.getAdapterManager().getAdapter(selected, IResource.class);
 			String path = resource.getLocation().toString();
 			MyFrame myFrame = new MyFrame("loadFolder " + path);
+		} else if (selected instanceof PlatformObject) {
+			IResource resource = (IResource) Platform.getAdapterManager().getAdapter(selected, IResource.class);
+			IPath path = resource.getLocation();
+			String spath = path.toString();
+			if(resource.getFileExtension() != null && (resource.getFileExtension().equals("java") || resource.getFileExtension().equals("jar"))) {
+				MyFrame myFrame = new MyFrame(spath);
+			}
+			IProject project = (IProject)Platform.getAdapterManager().getAdapter(selected, IProject.class);
+			resource = (IResource) Platform.getAdapterManager().getAdapter(project, IResource.class); 
+			path = resource.getLocation();
+			System.err.println(path);
+		} else  {
+			System.err.println(selected.getClass());
 		}
-
 		if (selected instanceof IFolder || selected instanceof PlatformObject) {
 			IResource resource = (IResource) Platform.getAdapterManager().getAdapter(selected, IResource.class);
 			IPath path = resource.getLocation();
 
-			/*
-			 * //Get the classes names in the folder String spath =
-			 * path.toString(); try {
-			 * Files.walk(Paths.get(spath)).forEach(filePath -> { if
-			 * (Files.isRegularFile(filePath)) { System.err.println(filePath); }
-			 * }); } catch (IOException e) { // TODO Auto-generated catch block
-			 * e.printStackTrace(); }
-			 */
+	
 			
 		}
 		return null;
