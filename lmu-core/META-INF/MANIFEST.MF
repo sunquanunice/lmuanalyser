@@ -3,10 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Lmucore
 Bundle-SymbolicName: lmu-core
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: lmucore.Activator
-Require-Bundle: lmu-library;bundle-version="1.0.0",
- org.eclipse.ui;bundle-version="3.107.0",
- org.eclipse.core.runtime;bundle-version="3.11.1"
+Require-Bundle: lmu-library;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: org.lucci.lmu,
