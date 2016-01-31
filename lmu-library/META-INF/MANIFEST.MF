@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Lmu-library
 Bundle-SymbolicName: lmu-library
-Bundle-Version: 1.0.0
+Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: toools,
  toools.beans,
@@ -28,3 +28,5 @@ Export-Package: toools,
  toools.text.xml,
  toools.thread,
  toools.util.assertion
+Bundle-ClassPath: .,
+ toools/
