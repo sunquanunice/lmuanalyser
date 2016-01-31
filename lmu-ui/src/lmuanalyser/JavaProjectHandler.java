@@ -24,12 +24,12 @@ public class JavaProjectHandler extends AbstractHandler{
 		if (selected instanceof IProject) {
 			resource = (IResource) Platform.getAdapterManager().getAdapter(selected, IResource.class);
 			path = resource.getLocation().toString();
-			MyFrame myFrame = new MyFrame("loadProject " + path);
+			new ResultGenerator().parser("loadProject " + path);
 		} else if (selected instanceof PlatformObject) {
 			IProject project = (IProject) Platform.getAdapterManager().getAdapter(selected, IProject.class);
 			resource = (IResource) Platform.getAdapterManager().getAdapter(project, IResource.class);
 			path = resource.getLocation().toString();
-			new MyFrame("loadProject " + path);
+			new ResultGenerator().parser("loadProject " + path);
 		}
 		return null;
 	}

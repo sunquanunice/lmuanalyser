@@ -24,22 +24,11 @@ public class JavaPackageHandler extends AbstractHandler{
 		if (selected instanceof IFolder) {
 			 resource = (IResource) Platform.getAdapterManager().getAdapter(selected, IResource.class);
 			 path = resource.getLocation().toString();
-			 MyFrame myFrame = new MyFrame("loadFolder " + path);
+			 new ResultGenerator().parser("loadFolder " + path);
 		} else if (selected instanceof PlatformObject) {
 			resource = (IResource) Platform.getAdapterManager().getAdapter(selected, IResource.class);
 			 path = resource.getLocation().toString();
-			 //Verify if the folder is in the src or not
-			
-			 /*String binPath = "";
-			 if(path.endsWith("src")) {
-				 binPath = path.substring(0, path.length()-3);
-			 } else {
-				 int index = path.indexOf("/src/");
-				 if(index == -1) {
-					 
-				 }
-			 }*/
-				MyFrame myFrame = new MyFrame("loadFolder " + path);
+			 new ResultGenerator().parser("loadFolder " + path);
 		}
 		return null;
 	}

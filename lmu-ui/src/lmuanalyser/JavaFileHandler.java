@@ -25,12 +25,12 @@ public class JavaFileHandler extends AbstractHandler{
 		if (selected instanceof IFile) {
 			 resource = (IResource) Platform.getAdapterManager().getAdapter(selected, IResource.class);
 			 path = resource.getLocation().toString();
-			 MyFrame myFrame = new MyFrame(path);
+			 new ResultGenerator().parser(path);
 		} else if (selected instanceof PlatformObject) {
 			 resource = (IResource) Platform.getAdapterManager().getAdapter(selected, IResource.class);
 			 path = resource.getLocation().toString();
 			if (resource.getFileExtension() != null && resource.getFileExtension().equals("java")) {
-				MyFrame myFrame = new MyFrame(path);
+				new ResultGenerator().parser(path);
 			}
 		}
 		return null;
