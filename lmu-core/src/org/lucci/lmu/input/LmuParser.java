@@ -840,22 +840,15 @@ public class LmuParser extends ModelFactory
 
 			    if (newModel == null)
 			    {
-				try
-				{
 				if(fileExtension.equals("java")) {
 					
 					newModel = modelFactory.createModel(file.getPath().getBytes());
 					
 				} else {
-				    newModel = modelFactory.createModel(file.getContent());
+				    newModel = modelFactory.createModel(file.getPath().getBytes());
 				}
 				    model.merge(newModel);
 				    modelCache.put(file, newModel);
-				}
-				catch (IOException ex)
-				{
-				    syntax("I/O error while reading file " + file.getPath());
-				}
 			    }
 			}
 		    }

@@ -66,8 +66,8 @@ public class JavaAnalyser extends ModelFactory{
 			if (!thisClass.getName().matches(".+\\$[0-9]+"))
 			{
 				Entity entity = new Entity();
-				entity.setName(modelAssistant.computeEntityName(thisClass));
-				entity.setNamespace(modelAssistant.computeEntityNamespace(thisClass));
+				//entity.setName(modelAssistant.computeEntityName(thisClass));
+				//entity.setNamespace(modelAssistant.computeEntityNamespace(thisClass));
 				entity_class.put(entity, thisClass);
 				model.addEntity(entity);
 			}
@@ -87,13 +87,13 @@ public class JavaAnalyser extends ModelFactory{
 			if (!entity.isPrimitive())
 			{
 				Class<?> clazz = entity_class.get(entity);
-				initInheritance(clazz, entity, model);
-				initAttributes(clazz, entity, model);
-				initOperations(clazz, entity, model);
+				//initInheritance(clazz, entity, model);
+				//initAttributes(clazz, entity, model);
+				//initOperations(clazz, entity, model);
 			}
 		}
 	}
-
+/*
 	private void initInheritance(Class<?> clazz, Entity entity, Model model)
 	{
 		// this collection will store the super class and super interfaces for
@@ -261,7 +261,7 @@ public class JavaAnalyser extends ModelFactory{
 
 		}
 	}
-
+/*
 	private Entity getEntity(Model model, Class<?> c)
 	{
 		Entity e = (Entity) primitiveMap.get(c);
@@ -299,5 +299,5 @@ public class JavaAnalyser extends ModelFactory{
 		{
 			return Visibility.PRIVATE;
 		}
-	}
+	} */
 }

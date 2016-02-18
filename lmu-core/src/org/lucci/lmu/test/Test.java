@@ -12,10 +12,10 @@ import org.lucci.lmu.input.ParseError;
 public class Test
 {
 	public static void main(String... args) throws ParseError, IOException
-	{
+	{/*
 		 Model model = new JarFileAnalyser().createModel(new File("/Users/lhogie/Downloads/fr.inria.aoste.timesquare.ccslkernel.solver_1.0.0.201403240946.jar"));
 		 Entity e = Entities.findEntityByName(model, "WaitExpression");
 		 System.out.println(e.getName());
-		 System.out.println(e.getAttributes());
+		 System.out.println(e.getAttributes());*/
 	}
 }

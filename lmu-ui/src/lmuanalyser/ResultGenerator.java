@@ -72,6 +72,7 @@ public class ResultGenerator {
 		if(src.endsWith(".jar") || src.endsWith(".java")) {
 			return "load " + src;
 		} else if(src.startsWith("loadProject") || src.startsWith("loadFolder")) {
+			System.out.println(src);
 			return src;
 		} else {
 			return null;

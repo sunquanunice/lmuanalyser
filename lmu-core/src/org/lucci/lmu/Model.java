@@ -47,6 +47,14 @@ public class Model extends ModelElement
 	{
 		return Collections.unmodifiableSet(entities);
 	}
+	public Entity getEntity(String name) {
+		for(Entity entity : entities) {
+			if(entity.getName().equals(name)) {
+				return entity;
+			}
+		}
+		return null;
+	}
 
 	public Set<Relation> getRelations()
 	{
