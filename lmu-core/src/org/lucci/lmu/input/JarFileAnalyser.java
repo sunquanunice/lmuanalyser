@@ -7,6 +7,7 @@ import org.lucci.lmu.AssociationRelation;
 import org.lucci.lmu.Entity;
 import org.lucci.lmu.Model;
 import org.lucci.lmu.AssociationRelation.TYPE;
+import org.lucci.lmu.DependenceRelation;
 
 /*
  * Created on Oct 11, 2004
@@ -26,12 +27,12 @@ public class JarFileAnalyser extends ModelFactory
 		Entity headEntity = new Entity();
 		headEntity.setName(jarName);
 		model.addEntity(headEntity);
-		Set<String> dependencies = JarUnityDependency.getJarDependencies(path);
+		Set<String> dependencies = JarUnitDependency.getJarDependencies(path);
 		dependencies.forEach(dependence -> {
 			Entity entity = new Entity();
 			entity.setName(dependence);
 			model.addEntity(entity);
-			AssociationRelation relation = new AssociationRelation(entity, headEntity);
+			DependenceRelation relation = new DependenceRelation(entity, headEntity);
 			relation.setType(TYPE.COMPOSITION);
 			model.addRelation(relation);
 		});

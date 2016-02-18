@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.lucci.lmu.AssociationRelation;
 import org.lucci.lmu.Attribute;
+import org.lucci.lmu.DependenceRelation;
 import org.lucci.lmu.Entity;
 import org.lucci.lmu.Group;
 import org.lucci.lmu.InheritanceRelation;
@@ -22,11 +23,10 @@ import org.lucci.lmu.Visibility;
 /**
  * @author luc.hogie
  */
-public class DotWriter extends AbstractWriter
-{
-    private String fontName = "Times";
+public class DotWriter extends AbstractWriter {
+	private String fontName = "Times";
 
-    @Override
+	@Override
     public byte[] writeModel(Model model) throws WriterException
     {
 	StringBuffer buf = new StringBuffer();
@@ -173,8 +173,26 @@ public class DotWriter extends AbstractWriter
 
 	    if (relation.getTailEntity().isVisible() && relation.getHeadEntity().isVisible())
 	    {
-		if (relation instanceof AssociationRelation)
-		{
+	    	if(relation instanceof DependenceRelation) {
+	    		AssociationRelation assoc = (AssociationRelation) relation;
+			    buf.append("\n\t");
+			    buf.append(quoteNodeNameIfNecessary(String.valueOf(assoc.getContainedEntity().getName().hashCode())));
+			    buf.append(" -> ");
+			    buf.append(quoteNodeNameIfNecessary(String.valueOf(assoc.getContainerEntity().getName().hashCode())));
+				buf.append(" [arrowtail=dot, arrowhead=vee");
+			    if (assoc.getCardinality() != null && !assoc.getCardinality().equals("1"))
+			    {
+				buf.append(", taillabel=\"" + assoc.getCardinality() + "\"");
+			    }
+
+			    if (assoc.getLabel() != null)
+			    {
+				buf.append(", label=\"" + assoc.getLabel() + "\"");
+			    }
+
+			    buf.append("];");
+	    	}else if (relation instanceof AssociationRelation)
+	    	{
 		    AssociationRelation assoc = (AssociationRelation) relation;
 		    buf.append("\n\t");
 		    buf.append(quoteNodeNameIfNecessary(String.valueOf(assoc.getContainedEntity().getName().hashCode())));
@@ -254,40 +272,27 @@ public class DotWriter extends AbstractWriter
 	return dotText.getBytes();
     }
 
-    private String getUMLVisibility(Visibility v)
-    {
-	if (v == Visibility.PUBLIC)
-	{
-	    return "+";
+	private String getUMLVisibility(Visibility v) {
+		if (v == Visibility.PUBLIC) {
+			return "+";
+		} else if (v == Visibility.PROTECTED) {
+			return "#";
+		} else if (v == Visibility.PRIVATE) {
+			return "-";
+		} else {
+			throw new IllegalArgumentException("unknow visilibity " + v);
+		}
 	}
-	else if (v == Visibility.PROTECTED)
-	{
-	    return "#";
-	}
-	else if (v == Visibility.PRIVATE)
-	{
-	    return "-";
-	}
-	else
-	{
-	    throw new IllegalArgumentException("unknow visilibity " + v);
-	}
-    }
 
-    private String quoteNodeNameIfNecessary(String s)
-    {
-	if (!s.matches("[0-9a-zA-Z]+"))
-	{
-	    return '"' + s + '"';
+	private String quoteNodeNameIfNecessary(String s) {
+		if (!s.matches("[0-9a-zA-Z]+")) {
+			return '"' + s + '"';
+		} else {
+			return s;
+		}
 	}
-	else
-	{
-	    return s;
-	}
-    }
 
-    private String escapeStringIfNecessary(String s)
-    {
-	return s.replaceAll("\\.", "\\.");
-    }
+	private String escapeStringIfNecessary(String s) {
+		return s.replaceAll("\\.", "\\.");
+	}
 }

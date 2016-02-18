@@ -2,9 +2,9 @@ package org.lucci.lmu.input;
 
 import org.lucci.lmu.Entity;
 
-public class UnityEntity {
+public class UnitEntity {
 	
-	public UnityEntity(String unityName) {
+	public UnitEntity(String unityName) {
 	}
 	public static Entity getEntity(String unityName) {
 		Entity entity = new Entity();

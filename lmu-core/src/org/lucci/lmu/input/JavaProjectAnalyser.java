@@ -8,6 +8,7 @@ import java.util.Set;
 
 import org.lucci.lmu.AssociationRelation;
 import org.lucci.lmu.AssociationRelation.TYPE;
+import org.lucci.lmu.DependenceRelation;
 import org.lucci.lmu.Entity;
 import org.lucci.lmu.Model;
 
@@ -29,13 +30,13 @@ public class JavaProjectAnalyser extends ModelFactory {
 			entities.addAll(value);
 		});
 		entities.forEach(entity -> {
-			model.addEntity(UnityEntity.getEntity(entity));
+			model.addEntity(UnitEntity.getEntity(entity));
 		});
 		dependencies.forEach((key, values) -> {
 			values.forEach(value -> {
 				Entity head = model.getEntity(key);
 				Entity tail = model.getEntity(value);
-				AssociationRelation relation = new AssociationRelation(tail, head);
+				DependenceRelation relation = new DependenceRelation(tail, head);
 				relation.setType(TYPE.COMPOSITION);
 				model.addRelation(relation);
 			});

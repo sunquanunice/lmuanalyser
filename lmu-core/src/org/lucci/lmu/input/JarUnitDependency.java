@@ -8,7 +8,7 @@ import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
-public class JarUnityDependency {
+public class JarUnitDependency {
 
 	public static Set<String> getJarDependencies(String path) {
 		Set<String> dependencies = new HashSet<String>();
