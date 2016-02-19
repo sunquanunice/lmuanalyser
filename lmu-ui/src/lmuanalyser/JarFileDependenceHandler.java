@@ -24,12 +24,12 @@ public class JarFileDependenceHandler extends AbstractHandler{
 		if (selected instanceof IFile) {
 			 resource = (IResource) Platform.getAdapterManager().getAdapter(selected, IResource.class);
 			 path = resource.getLocation().toString();
-			 new ResultGenerator().parser(path);
+			 new ResultGenerator().parser("loadJarDependence  "+ path);
 		} else if (selected instanceof PlatformObject) {
 			 resource = (IResource) Platform.getAdapterManager().getAdapter(selected, IResource.class);
 			 path = resource.getLocation().toString();
 			if (resource.getFileExtension() != null && resource.getFileExtension().equals("jar")) {
-				new ResultGenerator().parser(path);
+				new ResultGenerator().parser("loadJarDependence  "+ path);
 			}
 		}
 		return null;

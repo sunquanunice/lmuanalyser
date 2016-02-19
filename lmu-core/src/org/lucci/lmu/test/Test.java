@@ -6,7 +6,7 @@ import java.io.IOException;
 import org.lucci.lmu.Entities;
 import org.lucci.lmu.Entity;
 import org.lucci.lmu.Model;
-import org.lucci.lmu.input.JarFileAnalyser;
+import org.lucci.lmu.input.JarFileDependenceAnalyser;
 import org.lucci.lmu.input.ParseError;
 
 public class Test

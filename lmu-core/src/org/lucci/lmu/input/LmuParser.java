@@ -766,6 +766,42 @@ public class LmuParser extends ModelFactory
 	}
     } 
 
+    public void _loadProjectDependency(List<String> line) throws ParseError, ModelException
+    {
+	if (line.size() >= 2) {
+	    for (int i = 1; i < line.size(); ++i)
+	    {
+		RegularFile file = new RegularFile(line.get(i));
+		if (file.exists())
+		{
+		    
+			ModelFactory modelFactory = ModelFactory.getModelFactory(line.get(0));
+
+			if (modelFactory == null)
+			{
+			    syntax(file.getPath() + ": dunno what to do with the java project! ");
+			}
+			else
+			{
+			    Model newModel = this.modelCache.get(file.getPath());
+
+			    if (newModel == null)
+			    {
+				newModel = modelFactory.createModel(file.getPath().getBytes());
+				model.merge(newModel);
+				modelCache.put(file, newModel);
+			    }
+			}
+		    }
+		
+		else
+		{
+		    syntax("File does not exist: " + file.getPath());
+		}
+	    }
+	}
+    } 
+    
     public void _loadFolder(List<String> line) throws ParseError, ModelException
     {
 	if (line.size() >= 2) {
@@ -845,7 +881,11 @@ public class LmuParser extends ModelFactory
 					newModel = modelFactory.createModel(file.getPath().getBytes());
 					
 				} else {
-				    newModel = modelFactory.createModel(file.getPath().getBytes());
+				    try {
+						newModel = modelFactory.createModel(file.getContent());
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 				}
 				    model.merge(newModel);
 				    modelCache.put(file, newModel);
@@ -861,6 +901,56 @@ public class LmuParser extends ModelFactory
 	}
     }
 
+    public void _loadJarDependence(List<String> line) throws ParseError, ModelException
+    {
+	if (line.size() < 2)
+	{
+	    syntax("'load' [file1]");
+	}
+	else
+	{
+	    for (int i = 1; i < line.size(); ++i)
+	    {
+		RegularFile file = new RegularFile(line.get(i));
+
+		if (file.exists())
+		{
+		    String fileExtension = file.getExtension();
+		    
+		    if (fileExtension == null)
+		    {
+			syntax("File name has not extension, which is required to guess its content type: "
+				+ file.getPath());
+		    }
+		    else
+		    {
+			ModelFactory modelFactory = ModelFactory.getModelFactory("loadJarDependence");
+
+			if (modelFactory == null)
+			{
+			    syntax(file.getPath() + ": dunno what to do with files extension " + fileExtension);
+			}
+			else
+			{
+			    Model newModel = this.modelCache.get(file.getPath());
+
+			    if (newModel == null)
+			    {
+						newModel = modelFactory.createModel(file.getPath().getBytes());
+				    model.merge(newModel);
+				    modelCache.put(file, newModel);
+			    }
+			}
+		    }
+		}
+		else
+		{
+		    syntax("File does not exist: " + file.getPath());
+		}
+	    }
+	}
+    }
+    
     private void syntax(String s) throws ParseError
     {
 	throw new ParseError(lineNumber, s);

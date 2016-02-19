@@ -29,7 +29,7 @@ public class ManifestMFDependencies {
 				String classPath = attrs.getValue("Bundle-ClassPath");
 				if(classPath != null) {
 					for(String s : classPath.split(",")) {
-						if(!s.equals("bin/") && !s.equals(".")) {
+						if(!s.equals("bin/") && !s.equals(".")&&s.endsWith(".jar")) {
 							dependencies.add(s.substring(s.lastIndexOf("/")+1));
 						}
 					}

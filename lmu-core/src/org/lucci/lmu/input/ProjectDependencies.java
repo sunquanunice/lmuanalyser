@@ -40,6 +40,22 @@ public class ProjectDependencies {
 				for (String s : attrs.split(",")) {
 					dependencies.add(s);
 				}
+			
+			
+			String classPath =  manifest.getMainAttributes().getValue("Bundle-ClassPath");
+			if(classPath != null) {
+				for(String s : classPath.split(",")) {
+					if(!s.equals("bin/") && !s.equals(".")&&s.endsWith(".jar")) {
+						String jarTargetName = s.substring(s.lastIndexOf("/")+1);
+						dependencies.add(jarTargetName);
+						String newPath = path + File.separator + s.substring(0,s.lastIndexOf("/"));
+						// Tracing the jar file then to get the dependences of jar
+						JarUnitDependenceManager jarUnitDependenceManager = new JarUnitDependenceManager();
+						jarUnitDependenceManager.getJarDependencies(jarTargetName, newPath, dependenciesMap);
+					}
+				}
+			}
+			
 			}
 		} catch (MalformedURLException e) {
 			e.printStackTrace();

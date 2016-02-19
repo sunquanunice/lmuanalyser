@@ -75,8 +75,8 @@ public class FolderAnalyser extends ModelFactory {
 				Class<?> thisClass = classLoader.loadClass(className);
 				if (!thisClass.getName().matches(".+\\$[0-9]+")) {
 					Entity entity = new Entity();
-					//entity.setName(modelAssistant.computeEntityName(thisClass));
-					//entity.setNamespace(modelAssistant.computeEntityNamespace(thisClass));
+					entity.setName(modelAssistant.computeEntityName(thisClass));
+					entity.setNamespace(modelAssistant.computeEntityNamespace(thisClass));
 					entity_class.put(entity, thisClass);
 					model.addEntity(entity);
 				}
@@ -117,13 +117,13 @@ public class FolderAnalyser extends ModelFactory {
 		for (Entity entity : new HashSet<Entity>(model.getEntities())) {
 			if (!entity.isPrimitive()) {
 				Class<?> clazz = entity_class.get(entity);
-				//initInheritance(clazz, entity, model);
-				//initAttributes(clazz, entity, model);
-				//initOperations(clazz, entity, model);
+				initInheritance(clazz, entity, model);
+				initAttributes(clazz, entity, model);
+				initOperations(clazz, entity, model);
 			}
 		}
 	}
-/*
+
 	private void initInheritance(Class<?> clazz, Entity entity, Model model) {
 		// this collection will store the super class and super interfaces for
 		// the given class
@@ -295,5 +295,5 @@ public class FolderAnalyser extends ModelFactory {
 			return Visibility.PRIVATE;
 		}
 	}
-*/
+
 }

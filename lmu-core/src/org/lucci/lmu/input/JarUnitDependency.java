@@ -9,7 +9,7 @@ import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
 public class JarUnitDependency {
-
+/*
 	public static Set<String> getJarDependencies(String path) {
 		Set<String> dependencies = new HashSet<String>();
 	
@@ -33,4 +33,5 @@ public class JarUnitDependency {
 		}
 		return dependencies;
 	}
+	*/
 }

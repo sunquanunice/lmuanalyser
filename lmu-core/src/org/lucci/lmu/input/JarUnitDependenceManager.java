@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import java.util.stream.IntStream;
 
 public class JarUnitDependenceManager {
 	public static final String SUFFIX = "LMUMUMUMU";
@@ -71,6 +72,7 @@ public class JarUnitDependenceManager {
 			io.printStackTrace();
 		}
 		dependenciesMap.put(srcJarName, dependencies);
+		removeDirectory(srcJarName, currentDirectory);
 		return dependenciesMap;
 	}
 
@@ -78,4 +80,20 @@ public class JarUnitDependenceManager {
 	public static String createTmpDirectoryPath(String src, String currentDirectory) {
 		return currentDirectory + "/" + src.substring(0, src.length() - 4) + "_" + SUFFIX;
 	}
+	
+	private  void removeDirectory(String src, String currentDirectory) {
+		String newDirectory = createTmpDirectoryPath(src, currentDirectory);
+		deleteDir(new File(newDirectory));
+	}
+	
+	private  void deleteDir(File dir) {
+	      if (dir.isDirectory()) {
+	         String[] children = dir.list();
+	         IntStream.range(0, children.length).forEach(index -> {
+	        	 deleteDir(new File(dir, children[index]));
+	         });
+	      } 
+	    	  dir.delete();
+	      
+	 }
 }

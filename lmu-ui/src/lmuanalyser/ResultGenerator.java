@@ -69,6 +69,9 @@ public class ResultGenerator {
 	}
 	
 	private String getInput(String src) {
+		if(src.startsWith("loadJarDependence") || src.startsWith("loadProjectDependency")) {
+			return src;
+		}
 		if(src.endsWith(".jar") || src.endsWith(".java")) {
 			return "load " + src;
 		} else if(src.startsWith("loadProject") || src.startsWith("loadFolder")) {
