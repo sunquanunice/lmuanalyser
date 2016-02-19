@@ -35,7 +35,12 @@ public class JarFileDependenceAnalyser extends ModelFactory
 			entities.addAll(value);
 		});
 		entities.forEach(entity -> {
-			model.addEntity(UnitEntity.getEntity(entity));
+			UnitEntityGenerator generator = new UnitEntityGenerator();
+			if(entity.endsWith(".jar")) {
+				model.addEntity(generator.getEntity(entity, UnitEntityGenerator.TYPE_UNIT.JAR));
+			} else {
+					model.addEntity(generator.getEntity(entity, UnitEntityGenerator.TYPE_UNIT.PACKAGE));
+			}
 		});
 		dependencies.forEach((key, values) -> {
 			values.forEach(value -> {
