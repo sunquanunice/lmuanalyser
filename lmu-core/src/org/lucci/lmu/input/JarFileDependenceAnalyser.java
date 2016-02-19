@@ -50,20 +50,6 @@ public class JarFileDependenceAnalyser extends ModelFactory
 				model.addRelation(relation);
 			});
 		});
-		/*
-		Entity headEntity = new Entity();
-		headEntity.setName(jarName);
-		model.addEntity(headEntity);
-		Set<String> dependencies = JarUnitDependency.getJarDependencies(path);
-		dependencies.forEach(dependence -> {
-			Entity entity = new Entity();
-			entity.setName(dependence);
-			model.addEntity(entity);
-			DependenceRelation relation = new DependenceRelation(entity, headEntity);
-			relation.setType(TYPE.COMPOSITION);
-			model.addRelation(relation);
-		});
-*/
 		return model;
 	}
 }
