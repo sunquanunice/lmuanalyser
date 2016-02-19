@@ -37,7 +37,6 @@ public class JavaProjectAnalyser extends ModelFactory {
 				Entity head = model.getEntity(key);
 				Entity tail = model.getEntity(value);
 				DependenceRelation relation = new DependenceRelation(tail, head);
-				relation.setType(TYPE.COMPOSITION);
 				model.addRelation(relation);
 			});
 			

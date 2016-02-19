@@ -101,6 +101,52 @@
                   </with>
                </visibleWhen>
             </command>
+            <command
+                  commandId="fr.unice.retro.JavaProjectDependenceLMU.command"
+                  label="Java Project Dependence LMU"
+                  style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="activeMenuSelection">
+                     <iterate>
+                        <or>
+                           <adapt
+                                 type="org.eclipse.core.resources.IProject">
+                           </adapt>
+                           <adapt
+                                 type="org.eclipse.jdt.internal.core.JavaProject">
+                           </adapt>
+                        </or>
+                     </iterate>
+                  </with>
+               </visibleWhen>
+            </command>
+            <command
+                  commandId="fr.unice.retro.JarFileDependenceLMU.command"
+                  label="Jar File Dependence LMU"
+                  style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="activeMenuSelection">
+                     <iterate>
+                        <or>
+                           <adapt
+                                 type="org.eclipse.jdt.internal.core.JarPackageFragmentRoot">
+                           </adapt>
+                           <adapt
+                                 type="org.eclipse.core.resources.IFile">
+                              <test
+                                    property="org.eclipse.core.resources.extension"
+                                    value="jar">
+                              </test>
+                           </adapt>
+                        </or>
+                     </iterate>
+                  </with>
+               </visibleWhen>
+            </command>
          </menu>
       </menuContribution>
    </extension>
@@ -122,6 +168,14 @@
             id="fr.unice.retro.JarFileLMU.command"
             name="JarFileLMU">
       </command>
+      <command
+            id="lmuanalyser.JavaProjectDependenceHandler"
+            name="JavaProjectLMU">
+      </command>
+      <command
+            id="lmuanalyser.JarFileDependenceHandler"
+            name="JarFileLMU">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
@@ -140,6 +194,14 @@
       <handler
             class="lmuanalyser.JarFileHandler"
             commandId="fr.unice.retro.JarFileLMU.command">
+      </handler>
+      <handler
+            class="lmuanalyser.JavaProjectDependenceHandler"
+            commandId="fr.unice.retro.JavaProjectDependenceLMU.command">
+      </handler>
+      <handler
+            class="lmuanalyser.JarFileDependenceHandler"
+            commandId="fr.unice.retro.JarFileDependenceLMU.command">
       </handler>
    </extension>
 
